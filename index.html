@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro</title>
+</head>
+<body>
+    <div class="formulario" style="border-radius: 30px; background-color: rgb(164, 166, 166); padding: 20px;">
+        <h1>Hola, ingresa tus datos</h1>
+        <input type="text" id="name" placeholder="Nombre"> <br>
+        <input type="email" id="gmail" placeholder="Correo"> <br>
+        <input type="password" id="pass" placeholder="Contraseña"><br>
+        <input type="checkbox" id="si"> Acepto términos <br>
+        
+        <!-- El botón ahora llama a la función JS -->
+        <button type="button" id="btnEnviar" onclick="enviarDatos()">Aceptar</button>
+        <!-- En tu página de registro -->
+    </div>
+
+    <script>
+        async function enviarDatos() {
+            const btn = document.getElementById('btnEnviar');
+            const urlGoogle = "https://script.google.com/macros/s/AKfycbz2IDb_Dd0Hd5QP0_Sp-7h5NwkyBVp8_I3AldXPoBWccrFKQ6nBxKtN7axv-xA-fvFN/exec"; // <--- PEGA TU URL AQUÍ
+
+            const datos = {
+                nombre: document.getElementById('name').value,
+                correo: document.getElementById('gmail').value,
+                password: document.getElementById('pass').value
+            };
+
+            if (!document.getElementById('si').checked) return alert("Acepta los términos");
+
+            btn.disabled = true; // Evita clics dobles
+            btn.innerText = "Enviando...";
+
+            try {
+                await fetch(urlGoogle, {
+                    method: 'POST',
+                    mode: 'no-cors', // Vital para evitar errores de seguridad
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(datos)
+                });
+                
+                alert("¡Registrado con éxito!");
+                location.reload(); // Limpia el formulario
+            } catch (e) {
+                alert("Error al enviar");
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
